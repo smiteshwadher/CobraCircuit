@@ -1,79 +1,84 @@
-/* General Page Styling */
+/* Global Styles */
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: white;
-    font-family: "Poppins", sans-serif;
-    margin: 0;
-    overflow: hidden;
+    text-align: center;
+    background: radial-gradient(circle, #12232E, #203647);
+    color: #ff9966;
+    font-family: 'Arial', sans-serif;
 }
 
-/* Game Title */
+/* Title Styling */
 h1 {
     font-size: 2rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-align: center;
-    margin-bottom: 10px;
-    background: linear-gradient(90deg, #ff9966, #ff5e62);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px #ff9966;
 }
 
-/* Canvas Styling */
-canvas {
-    background-color: rgba(0, 0, 0, 0.8);
+/* Game Canvas */
+#gameCanvas {
+    display: block;
+    margin: 20px auto;
+    background-color: black;
     border: 5px solid #ff5e62;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255, 94, 98, 0.7);
+    box-shadow: 0px 0px 15px #ff5e62;
 }
 
-/* Mobile Controls */
+/* Controls */
 #controls {
-    display: none; /* Hidden by default (for non-mobile devices) */
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    margin-top: 20px;
 }
 
-/* Row for Left & Right Buttons */
-.controls-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-/* Mobile Control Buttons */
+/* Arrow Buttons */
 #controls button {
+    font-size: 30px;
     width: 60px;
     height: 60px;
-    font-size: 24px;
-    border: none;
+    margin: 5px;
     background: linear-gradient(135deg, #ff9966, #ff5e62);
     color: white;
+    border: none;
     border-radius: 8px;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(255, 94, 98, 0.5);
     transition: all 0.2s ease-in-out;
 }
 
+/* Hover Effect */
 #controls button:hover {
     transform: scale(1.1);
-    background: linear-gradient(135deg, #ff5e62, #ff9966);
 }
 
-/* Show Controls Only on Mobile */
+/* Arrange side buttons properly */
+.side-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Play Again Button */
+#playAgain {
+    display: none;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #ff9966, #ff5e62);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 0px 15px #ff5e62;
+}
+
+#playAgain:hover {
+    transform: scale(1.1);
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-    #controls {
-        display: flex;
+    #controls button {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
     }
 }

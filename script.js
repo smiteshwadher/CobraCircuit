@@ -10,19 +10,14 @@ let direction = "RIGHT";
 let food = { x: 15, y: 15 };
 let gameInterval;
 
-// Keyboard Controls
-document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-    if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-    if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-    if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
-});
+// Detect Mobile Device and Show Controls
+function isMobileDevice() {
+    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
 
-// Mobile Controls
-document.getElementById("upBtn").addEventListener("click", () => direction = "UP");
-document.getElementById("downBtn").addEventListener("click", () => direction = "DOWN");
-document.getElementById("leftBtn").addEventListener("click", () => direction = "LEFT");
-document.getElementById("rightBtn").addEventListener("click", () => direction = "RIGHT");
+if (isMobileDevice()) {
+    document.getElementById("controls").classList.remove("hidden");
+}
 
 // Start the game
 function startGame() {
@@ -106,6 +101,22 @@ document.getElementById("playAgain").addEventListener("click", () => {
     document.getElementById("playAgain").style.display = "none";
     startGame();
 });
+
+// Keyboard Controls
+document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+    if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+    if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+    if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+});
+
+// Mobile Controls
+if (isMobileDevice()) {
+    document.getElementById("moveUp").addEventListener("click", () => direction = "UP");
+    document.getElementById("moveDown").addEventListener("click", () => direction = "DOWN");
+    document.getElementById("moveLeft").addEventListener("click", () => direction = "LEFT");
+    document.getElementById("moveRight").addEventListener("click", () => direction = "RIGHT");
+}
 
 // Start the Game
 startGame();

@@ -74,6 +74,13 @@ h1 {
     transform: scale(1.1);
 }
 
+/* Hide Controls on Desktop */
+@media (min-width: 769px) {
+    #controls {
+        display: none !important;
+    }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     #controls button {

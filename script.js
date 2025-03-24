@@ -32,8 +32,8 @@ let dx = 1, dy = 0;
 let score = 0;
 let highScore = localStorage.getItem("highScore") || 0;
 highScoreDisplay.textContent = highScore;
-let gameInterval;
-let speed = 120; // Increased speed (Lower = Faster)
+let gameInterval = null; // Ensure only one interval runs at a time
+let speed = 120; // Default game speed
 
 // Draw Snake
 function drawSnake() {
@@ -94,14 +94,17 @@ function updateScore() {
     }
 }
 
-// Game Loop (Optimized)
+// Game Loop (Optimized to prevent multiple loops)
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawSnake();
     drawFood();
     moveSnake();
     checkCollision();
-    setTimeout(gameLoop, speed);
+
+    // Clear any existing interval before setting a new one
+    if (gameInterval) clearTimeout(gameInterval);
+    gameInterval = setTimeout(gameLoop, speed);
 }
 
 // Game Over
@@ -109,8 +112,9 @@ function gameOver() {
     playAgainBtn.style.display = "block";
 }
 
-// Start Game
+// Start Game (Ensuring only one game loop at a time)
 function startGame() {
+    clearTimeout(gameInterval); // Stop any existing game loops
     snake = [{ x: 10, y: 10 }];
     dx = 1;
     dy = 0;
@@ -124,7 +128,7 @@ function startGame() {
 // Play Again Button
 playAgainBtn.addEventListener("click", startGame);
 
-// Keyboard Controls
+// Keyboard Controls (Prevent direction reversal)
 document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowUp" && dy === 0) { dx = 0; dy = -1; }
     if (event.key === "ArrowDown" && dy === 0) { dx = 0; dy = 1; }
@@ -133,10 +137,10 @@ document.addEventListener("keydown", (event) => {
 });
 
 // Mobile Touch Controls
-upBtn.addEventListener("click", () => { dx = 0; dy = -1; });
-downBtn.addEventListener("click", () => { dx = 0; dy = 1; });
-leftBtn.addEventListener("click", () => { dx = -1; dy = 0; });
-rightBtn.addEventListener("click", () => { dx = 1; dy = 0; });
+upBtn.addEventListener("click", () => { if (dy === 0) { dx = 0; dy = -1; } });
+downBtn.addEventListener("click", () => { if (dy === 0) { dx = 0; dy = 1; } });
+leftBtn.addEventListener("click", () => { if (dx === 0) { dx = -1; dy = 0; } });
+rightBtn.addEventListener("click", () => { if (dx === 0) { dx = 1; dy = 0; } });
 
 // Start game initially
 startGame();

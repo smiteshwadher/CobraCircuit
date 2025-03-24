@@ -1,9 +1,12 @@
-/* Global Styles */
+/* General Page Styling */
 body {
     text-align: center;
     background: radial-gradient(circle, #12232E, #203647);
     color: #ff9966;
     font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Title Styling */
@@ -12,80 +15,97 @@ h1 {
     text-shadow: 0 0 10px #ff9966;
 }
 
-/* Game Canvas */
-#gameCanvas {
-    display: block;
-    margin: 20px auto;
-    background-color: black;
-    border: 5px solid #ff5e62;
-    box-shadow: 0px 0px 15px #ff5e62;
-}
-
-/* Controls */
-#controls {
+/* Game Container */
+#game-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
 }
 
-/* Arrow Buttons */
-#controls button {
-    font-size: 30px;
-    width: 60px;
-    height: 60px;
-    margin: 5px;
-    background: linear-gradient(135deg, #ff9966, #ff5e62);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(255, 94, 98, 0.5);
-    transition: all 0.2s ease-in-out;
+/* Canvas Styling */
+canvas {
+    border: 5px solid #ff9966;
+    box-shadow: 0 0 15px #ff9966;
+    background-color: black;
+    max-width: 100%;
 }
 
-/* Hover Effect */
-#controls button:hover {
-    transform: scale(1.1);
-}
-
-/* Arrange side buttons properly */
-.side-buttons {
-    display: flex;
-    gap: 10px;
+/* Scoreboard */
+#scoreboard {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #ffcc66;
 }
 
 /* Play Again Button */
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
 #playAgain {
-    display: none;
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 20px;
+    padding: 12px 25px;
+    font-size: 1.2rem;
     font-weight: bold;
     color: white;
-    background: linear-gradient(135deg, #ff9966, #ff5e62);
+    background: linear-gradient(45deg, #ff9966, #ff5e62);
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0px 0px 15px #ff5e62;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ff9966, 0 0 20px #ff5e62;
+    transition: all 0.3s ease-in-out;
 }
 
 #playAgain:hover {
-    transform: scale(1.1);
+    box-shadow: 0 0 20px #ff9966, 0 0 30px #ff5e62;
+    transform: scale(1.05);
 }
 
-/* Hide Controls on Desktop */
-@media (min-width: 769px) {
-    #controls {
-        display: none !important;
-    }
+/* Mobile Controls (Hidden on Desktop) */
+#controls {
+    display: none;
+    margin-top: 10px;
 }
 
-/* Mobile Responsiveness */
+/* Show controls only on mobile */
 @media (max-width: 768px) {
+    #controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .side-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    /* Neon-Styled Mobile Buttons */
     #controls button {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, #00FFFF, #00FF99);
+        color: black;
+        border: 2px solid #00FFFF;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 10px #00FFFF, 0 0 20px #00FF99;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #controls button:active {
+        background: linear-gradient(45deg, #00FF99, #00FFFF);
+        box-shadow: 0 0 15px #00FF99, 0 0 25px #00FFFF;
+        transform: scale(0.95);
+    }
+
+    canvas {
+        width: 90vw;
+        height: auto;
     }
 }

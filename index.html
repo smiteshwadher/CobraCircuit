@@ -8,7 +8,20 @@
 </head>
 <body>
     <h1>CobraCircuit 🐍</h1>
-    <canvas id="gameCanvas"></canvas>
+    <div id="game-container">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="scoreboard">
+            <p>Score: <span id="score">0</span></p>
+            <p>High Score: <span id="highScore">0</span></p>
+        </div>
+    </div>  
+
+    <!-- Play Again Button -->
+    <div class="button-container">
+        <button id="playAgain" style="display: none;">Play Again</button>
+    </div>
+
+    <!-- Mobile Controls Hidden By Default -->
     <div id="controls">
         <button id="moveUp">▲</button>
         <div class="side-buttons">
@@ -17,8 +30,7 @@
             <button id="moveRight">▶</button>
         </div>
     </div>
-    <!-- Play Again Button -->
-    <button id="playAgain" style="display: none;">Play Again</button>
+    
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,122 +1,142 @@
+// Select elements
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const playAgainBtn = document.getElementById("playAgain");
+const scoreDisplay = document.getElementById("score");
+const highScoreDisplay = document.getElementById("highScore");
+const controls = document.getElementById("controls");
 
-canvas.width = 400;
-canvas.height = 400;
+// Mobile Buttons
+const upBtn = document.getElementById("moveUp");
+const downBtn = document.getElementById("moveDown");
+const leftBtn = document.getElementById("moveLeft");
+const rightBtn = document.getElementById("moveRight");
 
-// Snake Properties
+// Detect Mobile Devices and Show/Hide Controls
+function checkDevice() {
+    if (window.innerWidth <= 768) {
+        controls.style.display = "flex";  // Show mobile controls
+    } else {
+        controls.style.display = "none";  // Hide on larger screens
+    }
+}
+
+// Run on Load & Resize
+window.onload = checkDevice;
+window.onresize = checkDevice;
+
+// Game variables
 let snake = [{ x: 10, y: 10 }];
-let direction = "RIGHT";
-let food = { x: 15, y: 15 };
+let food = { x: 5, y: 5 };
+let dx = 1, dy = 0;
+let score = 0;
+let highScore = localStorage.getItem("highScore") || 0;
+highScoreDisplay.textContent = highScore;
 let gameInterval;
+let speed = 120; // Increased speed (Lower = Faster)
 
-// Detect Mobile Device and Show Controls
-function isMobileDevice() {
-    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
-
-if (isMobileDevice()) {
-    document.getElementById("controls").classList.remove("hidden");
-}
-
-// Start the game
-function startGame() {
-    gameInterval = setInterval(gameLoop, 100);
-}
-
-// Draw Snake and Food
-function draw() {
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Draw Snake
-    ctx.fillStyle = "#00FFFF";
+// Draw Snake
+function drawSnake() {
+    ctx.fillStyle = "#00FFFF"; // Neon Cyan
     snake.forEach((segment) => {
         ctx.fillRect(segment.x * 20, segment.y * 20, 20, 20);
     });
+}
 
-    // Draw Food
-    ctx.fillStyle = "#FFD700";
+// Draw Food
+function drawFood() {
+    ctx.fillStyle = "#FFD700"; // Gold Color
     ctx.fillRect(food.x * 20, food.y * 20, 20, 20);
 }
 
 // Move Snake
 function moveSnake() {
-    let head = { ...snake[0] };
-
-    switch (direction) {
-        case "UP":
-            head.y--;
-            break;
-        case "DOWN":
-            head.y++;
-            break;
-        case "LEFT":
-            head.x--;
-            break;
-        case "RIGHT":
-            head.x++;
-            break;
-    }
-
+    let head = { x: snake[0].x + dx, y: snake[0].y + dy };
     snake.unshift(head);
 
-    // Check Collision with Food
     if (head.x === food.x && head.y === food.y) {
-        food = {
-            x: Math.floor(Math.random() * (canvas.width / 20)),
-            y: Math.floor(Math.random() * (canvas.height / 20)),
-        };
+        generateFood();
+        updateScore();
     } else {
         snake.pop();
     }
+}
 
-    // Check Game Over
+// Check Collision
+function checkCollision() {
+    let head = snake[0];
     if (
-        head.x < 0 || head.x >= canvas.width / 20 ||
-        head.y < 0 || head.y >= canvas.height / 20 ||
+        head.x < 0 || head.y < 0 || 
+        head.x >= canvas.width / 20 || 
+        head.y >= canvas.height / 20 || 
         snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
     ) {
         gameOver();
     }
 }
 
-// Game Loop
-function gameLoop() {
-    moveSnake();
-    draw();
+// Generate New Food
+function generateFood() {
+    food = {
+        x: Math.floor(Math.random() * (canvas.width / 20)),
+        y: Math.floor(Math.random() * (canvas.height / 20))
+    };
 }
 
-// Handle Game Over
+// Update Score
+function updateScore() {
+    score++;
+    scoreDisplay.textContent = score;
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("highScore", highScore);
+        highScoreDisplay.textContent = highScore;
+    }
+}
+
+// Game Loop (Optimized)
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawSnake();
+    drawFood();
+    moveSnake();
+    checkCollision();
+    setTimeout(gameLoop, speed);
+}
+
+// Game Over
 function gameOver() {
-    clearInterval(gameInterval);
-    document.getElementById("playAgain").style.display = "block";
+    playAgainBtn.style.display = "block";
+}
+
+// Start Game
+function startGame() {
+    snake = [{ x: 10, y: 10 }];
+    dx = 1;
+    dy = 0;
+    score = 0;
+    scoreDisplay.textContent = score;
+    playAgainBtn.style.display = "none";
+    generateFood();
+    gameLoop();
 }
 
 // Play Again Button
-document.getElementById("playAgain").addEventListener("click", () => {
-    snake = [{ x: 10, y: 10 }];
-    direction = "RIGHT";
-    food = { x: 15, y: 15 };
-    document.getElementById("playAgain").style.display = "none";
-    startGame();
-});
+playAgainBtn.addEventListener("click", startGame);
 
 // Keyboard Controls
 document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-    if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-    if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-    if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+    if (event.key === "ArrowUp" && dy === 0) { dx = 0; dy = -1; }
+    if (event.key === "ArrowDown" && dy === 0) { dx = 0; dy = 1; }
+    if (event.key === "ArrowLeft" && dx === 0) { dx = -1; dy = 0; }
+    if (event.key === "ArrowRight" && dx === 0) { dx = 1; dy = 0; }
 });
 
-// Mobile Controls
-if (isMobileDevice()) {
-    document.getElementById("moveUp").addEventListener("click", () => direction = "UP");
-    document.getElementById("moveDown").addEventListener("click", () => direction = "DOWN");
-    document.getElementById("moveLeft").addEventListener("click", () => direction = "LEFT");
-    document.getElementById("moveRight").addEventListener("click", () => direction = "RIGHT");
-}
+// Mobile Touch Controls
+upBtn.addEventListener("click", () => { dx = 0; dy = -1; });
+downBtn.addEventListener("click", () => { dx = 0; dy = 1; });
+leftBtn.addEventListener("click", () => { dx = -1; dy = 0; });
+rightBtn.addEventListener("click", () => { dx = 1; dy = 0; });
 
-// Start the Game
+// Start game initially
 startGame();

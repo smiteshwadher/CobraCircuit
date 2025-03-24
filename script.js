@@ -8,7 +8,15 @@ let food = generateFood(); // Stores the co-ordinates of the food items created 
 
 resizeCanvas(); // Calls this function to resize the canvas based on the device being used.
 
-window.addEventListener("resize", resizeCanvas); // Listening for the resize events.
+window.addEventListener("load", () => {
+    hideMobileControls();
+    resizeCanvas();
+});
+window.addEventListener("resize", () => {
+    hideMobileControls();
+    resizeCanvas();
+});
+
 document.addEventListener("keydown", changeDirection);
 
 // Listens to mobile inputs.
@@ -21,6 +29,18 @@ function resizeCanvas() {
     let size = Math.min(window.innerWidth, window.innerHeight) * 0.9;
     size = Math.max(size, 300);
     canvas.width = canvas.height = Math.floor(size / box) * box;
+}
+
+function hideMobileControls() {
+    const controls = document.getElementById("controls");
+
+    if (window.innerWidth > 768) { // If the screen is larger than 768px (not mobile)
+        controls.style.display = "none";
+    } else {
+        controls.style.display = "flex"; // Show controls for mobile
+    }
+
+    resizeCanvas(); // Ensure canvas resizes properly when toggling mobile controls
 }
 
 // Below function listens to keyboard events.
